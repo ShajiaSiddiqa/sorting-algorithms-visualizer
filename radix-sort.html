@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Radix Sort - An Interactive Visualizer</title>
+<meta name="description" content="A Radix Sort visualizer with digit buckets, output collection, pseudocode, complexity, and use cases." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="sorting-theme.css" />
+</head>
+<body>
+<div class="topbar"><div class="brand"><span class="glyph">R</span> Radix Sort Studio</div><nav class="topnav"><a href="quicksort.html">Quick</a><a href="merge-sort.html">Merge</a><a href="heap-sort.html">Heap</a><a href="insertion-sort.html">Insertion</a><a href="bubble-sort.html">Bubble</a><a href="selection-sort.html">Selection</a><a href="bucket-sort.html">Bucket</a><a href="counting-sort.html">Counting</a></nav></div>
+<header class="hero wrap"><div class="eyebrow">Digit - Bucket - Collect</div><h1>Watch <span class="gold">Radix Sort</span><br>sort one digit at a <em>time</em>.</h1><p>Group numbers by their ones digit, collect them, then repeat for tens and hundreds while preserving previous digit order.</p></header>
+<main class="wrap">
+<section class="panel studio"><div class="stage-head"><div><h2>Digit buckets</h2><div class="sub">Each pass distributes values into buckets 0-9 for the current digit, then collects buckets in order.</div></div><div class="legend"><span><i class="chip pivot"></i>Current digit</span><span><i class="chip sorted"></i>Collected output</span><span><i class="chip range"></i>Bucket group</span></div></div>
+<div class="stage"><div class="bars" id="bars"></div></div><div class="narration"><div class="dot">*</div><div class="text" id="narration">Press <b>Play</b> to begin sorting.</div></div>
+<div class="controls"><div class="scrub"><input type="range" id="scrub" min="0" max="0" value="0" /><div class="steplabel" id="steplabel">step 0 / 0</div></div><div class="btnrow"><button class="btn" id="back">Back</button><button class="btn primary" id="playBtn" aria-pressed="false">Play</button><button class="btn" id="fwd">Step</button><button class="btn" id="reset">Restart</button><div class="spacer"></div><div class="speedbox"><span>Slow</span><input type="range" id="speed" min="120" max="1400" value="760" step="20" /><span>Fast</span></div></div><div class="config"><div class="field"><label for="custom">Non-negative integers (up to 12)</label><div class="inrow"><input type="text" id="custom" placeholder="e.g. 170, 45, 75, 90, 802, 24" /><button class="btn gold" id="apply">Sort it</button></div></div><div class="field" style="max-width:160px;flex:0 0 160px;justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="rand">Shuffle new</button></div></div></div>
+<div class="grid2"><div><div class="minihead"><span class="num">CODE</span> Pseudocode</div><div class="code" id="code"></div></div><div><div class="minihead"><span class="num">DATA</span> Live cost</div><div class="stats"><div class="stat"><div class="k">Comparisons</div><div class="v" id="st-cmp">0</div></div><div class="stat"><div class="k">Writes</div><div class="v" id="st-write">0</div></div><div class="stat"><div class="k">Digit passes</div><div class="v" id="st-pass">0</div></div><div class="stat"><div class="k">Elements</div><div class="v" id="st-n">0</div></div></div><div class="minihead" style="margin-top:22px;"><span class="num">NOTES</span> Algorithm traits</div><div class="stats" id="stack"></div></div></div></section>
+<section class="panel prose"><h3>When to use Radix Sort</h3><p>Use Radix Sort for fixed-width integer-like keys when stable digit passes are cheap.</p><ul><li>IDs, phone-number-like numeric keys, timestamps, and byte sequences.</li><li>Large integer arrays where comparison sorting overhead is high.</li><li>Systems that can trade extra memory for near-linear sorting.</li></ul></section>
+<section class="section"><div class="panel prose" style="padding:8px;"><table class="ctable"><thead><tr><th>Case</th><th>Time</th><th>Space</th><th>Stable</th></tr></thead><tbody><tr><td class="case good">All cases</td><td class="big">O(d(n + b))</td><td>O(n + b)</td><td class="good">Yes</td></tr></tbody></table></div></section>
+</main><footer>Radix Sort Studio - made with a ♥ for clear algorithms.  </footer>
+<script>
+window.SORT_VISUALIZER={algorithm:"radix",view:"buckets",initial:[170,45,75,90,802,24,2,66],maxRandom:999,inputMax:999,code:['<span class="fn">radixSort</span>(A)','  <span class="kw">for</span> each digit position','    create buckets 0..9','    <span class="kw">for</span> value in A','      place value by current digit','    collect buckets in order','    keep sort stable for next digit'],traceLabels:[{k:"Stable",v:"Yes"},{k:"Extra memory",v:"O(n + b)"},{k:"Strategy",v:"Digit distribution"},{k:"Best use",v:"Fixed-width keys"}]};
+</script><script src="sorting-visualizer.js"></script>
+</body>
+</html>

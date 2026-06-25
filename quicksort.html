@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Sort — An Interactive Visualizer</title>
+<meta name="description" content="A soft, interactive, step-by-step visualizer for the Quick Sort algorithm: partitioning, pivots, recursion tree, and complexity, explained visually." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --cream:#FBF4EF;
+  --paper:#FFFDFB;
+  --card:#FFFFFF;
+  --pink:#D49A9A;
+  --pink-deep:#B97C82;
+  --blush:#F4DEDE;
+  --blush-2:#EBCCCC;
+  --skin:#EAD9C8;
+  --skin-2:#F4E8DB;
+  --gold:#C39A5C;
+  --gold-soft:#E3C58E;
+  --gold-deep:#A87E3C;
+  --coral:#E0A07F;
+  --sage:#A9C29C;
+  --sage-deep:#7FA070;
+  --ink:#574540;
+  --ink-soft:#917A70;
+  --line:#ECDACF;
+  --line-soft:#F4E7DD;
+  --shadow:0 18px 40px -24px rgba(120,80,70,.45);
+  --shadow-soft:0 8px 24px -16px rgba(120,80,70,.35);
+  --radius:22px;
+  --radius-sm:14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:"DM Sans",system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 12% -8%, #FCEFE9 0%, rgba(252,239,233,0) 60%),
+    radial-gradient(1100px 700px at 100% 0%, #F8E9DC 0%, rgba(248,233,220,0) 55%),
+    radial-gradient(900px 900px at 50% 120%, #FBE8E8 0%, rgba(251,232,232,0) 60%),
+    var(--cream);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+a{color:var(--gold-deep);}
+
+/* ---------- Header ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 22px;max-width:1180px;margin:0 auto;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:12px;font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;letter-spacing:.2px;}
+.brand .glyph{
+  width:34px;height:34px;border-radius:11px;flex:none;
+  background:linear-gradient(150deg,var(--gold-soft),var(--pink));
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55), var(--shadow-soft);
+  display:grid;place-items:center;color:#fff;font-size:.95rem;
+}
+.topnav{display:flex;flex-wrap:wrap;gap:18px 24px;font-size:.93rem;}
+.topnav a{color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.topnav a:hover{color:var(--pink-deep);}
+
+.hero{padding:34px 0 14px;text-align:center;}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold-deep);margin-bottom:16px;
+}
+.hero h1{
+  font-family:"Fraunces",serif;font-weight:500;
+  font-size:clamp(2.5rem,6.5vw,4.6rem);line-height:1.02;margin:0 0 18px;
+  letter-spacing:-.01em;color:#4a3a35;
+}
+.hero h1 em{font-style:italic;color:var(--pink-deep);}
+.hero h1 .gold{
+  background:linear-gradient(100deg,var(--gold-deep),var(--gold-soft) 60%,var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;
+}
+.hero p{max-width:600px;margin:0 auto;color:var(--ink-soft);font-size:1.08rem;}
+
+/* ---------- Cards / layout ---------- */
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.studio{margin:30px 0 10px;padding:26px;}
+@media(min-width:920px){.studio{padding:30px 32px;}}
+
+.stage-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;}
+.stage-head h2{font-family:"Fraunces",serif;font-weight:500;font-size:1.5rem;margin:0;color:#4a3a35;}
+.stage-head .sub{color:var(--ink-soft);font-size:.9rem;}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:14px 18px;font-size:.8rem;color:var(--ink-soft);}
+.legend span{display:inline-flex;align-items:center;gap:7px;}
+.chip{width:15px;height:15px;border-radius:5px;flex:none;border:1px solid rgba(0,0,0,.04);}
+.chip.range{background:linear-gradient(180deg,#EFCBCB,#DAA3A3);}
+.chip.compare{background:linear-gradient(180deg,#E6A8B0,#C97E8A);}
+.chip.pivot{background:linear-gradient(180deg,var(--gold-soft),var(--gold));}
+.chip.swap{background:linear-gradient(180deg,#EDC2A8,var(--coral));}
+.chip.sorted{background:linear-gradient(180deg,#C7DBBC,var(--sage));}
+.chip.dim{background:#EFE3DA;}
+
+/* ---------- Bars ---------- */
+.stage{
+  background:linear-gradient(180deg,#FFFDFB, #FBF1EC);
+  border:1px solid var(--line-soft);border-radius:18px;
+  padding:20px 18px 14px;overflow-x:auto;
+  position:relative;
+}
+.bars{display:flex;align-items:flex-end;gap:10px;min-height:300px;}
+.col{
+  flex:1 0 0;min-width:42px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  position:relative;isolation:isolate;cursor:pointer;border-radius:12px;
+}
+.col:focus-visible{outline:3px solid rgba(195,154,92,.4);outline-offset:4px;}
+.col .val{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--ink-soft);font-weight:500;transition:color .25s;}
+.bar-track{
+  width:100%;height:230px;display:flex;align-items:flex-end;
+  border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(244,222,222,.25));
+  padding:0 2px;
+  transition:box-shadow .2s, background .2s;
+}
+.col:hover .bar-track{box-shadow:inset 0 0 0 1px rgba(195,154,92,.18);background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(244,222,222,.35));}
+.bar{
+  width:100%;border-radius:9px 9px 6px 6px;
+  background:linear-gradient(180deg,#EFCBCB,#DAA3A3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
+  transition:height .42s cubic-bezier(.34,1.2,.5,1), background .25s, transform .25s, box-shadow .25s;
+}
+.col .idx{font-family:"JetBrains Mono",monospace;font-size:.68rem;color:#b8a79d;}
+.ptrs{height:42px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.tag{
+  font-family:"JetBrains Mono",monospace;font-size:.64rem;font-weight:600;
+  padding:2px 7px;border-radius:20px;line-height:1.4;color:#fff;white-space:nowrap;
+  opacity:0;transform:translateY(-3px);transition:opacity .2s,transform .2s;
+}
+.tag.show{opacity:1;transform:translateY(0);}
+.tag.i{background:var(--gold);}
+.tag.j{background:var(--pink-deep);}
+.tag.p{background:var(--gold-deep);}
+
+/* bar states */
+.col.dim .bar{background:#ECDFD6;}
+.col.dim .val{color:#c8b8ad;}
+.bar.compare{background:linear-gradient(180deg,#E6A8B0,#C97E8A);transform:translateY(-4px);}
+.bar.pivot{background:linear-gradient(180deg,var(--gold-soft),var(--gold));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 0 0 3px rgba(195,154,92,.18);}
+.bar.swap{background:linear-gradient(180deg,#EDC2A8,var(--coral));transform:translateY(-7px) scale(1.02);}
+.bar.sorted{background:linear-gradient(180deg,#C7DBBC,var(--sage));}
+.col.inrange{position:relative;}
+.col.inrange::before{
+  content:"";position:absolute;inset:-2px -3px;border-radius:12px;
+  background:rgba(195,154,92,.07);z-index:-1;
+}
+.col.active .val{color:#4a3a35;}
+.col.active .idx{color:var(--gold-deep);font-weight:600;}
+.bar.compare,.bar.swap,.bar.pivot{
+  animation:barPop .38s ease;
+}
+@keyframes barPop{
+  0%{filter:saturate(.95);transform:translateY(0) scale(.98);}
+  55%{filter:saturate(1.12);}
+  100%{filter:saturate(1);}
+}
+
+/* ---------- Narration ---------- */
+.narration{
+  margin-top:18px;display:flex;gap:14px;align-items:flex-start;
+  background:linear-gradient(180deg,#FFF8F4,#FCEFE9);
+  border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+}
+.narration .dot{
+  width:30px;height:30px;border-radius:50%;flex:none;margin-top:1px;
+  background:linear-gradient(150deg,var(--pink),var(--gold-soft));
+  display:grid;place-items:center;color:#fff;font-size:.9rem;
+}
+.narration .text{font-size:1.02rem;color:#5a4540;}
+.narration .text b{color:var(--pink-deep);font-weight:600;}
+
+/* ---------- Controls ---------- */
+.controls{display:flex;flex-direction:column;gap:16px;margin-top:18px;}
+.scrub{display:flex;align-items:center;gap:14px;}
+.scrub input[type=range]{flex:1;}
+.steplabel{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--ink-soft);white-space:nowrap;min-width:96px;text-align:right;}
+
+input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:6px;background:var(--blush-2);outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(150deg,var(--gold-soft),var(--gold));cursor:pointer;box-shadow:0 2px 6px rgba(168,126,60,.4);border:2px solid #fff;}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border:2px solid #fff;border-radius:50%;background:var(--gold);cursor:pointer;}
+
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.btn{
+  font-family:"DM Sans",sans-serif;font-size:.92rem;font-weight:600;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  padding:11px 16px;border-radius:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .15s,box-shadow .2s,background .2s,border-color .2s;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft);border-color:var(--blush-2);}
+.btn:active{transform:translateY(0);}
+.btn:focus-visible{outline:3px solid rgba(195,154,92,.45);outline-offset:2px;}
+.btn.primary{background:linear-gradient(150deg,var(--pink),var(--pink-deep));color:#fff;border:none;}
+.btn.primary:hover{box-shadow:0 12px 24px -12px rgba(185,124,130,.8);}
+.btn.gold{background:linear-gradient(150deg,var(--gold-soft),var(--gold));color:#fff;border:none;}
+.btn svg{width:16px;height:16px;}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.spacer{flex:1;}
+.speedbox{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--ink-soft);}
+.speedbox input[type=range]{width:120px;}
+
+/* config row */
+.config{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;}
+.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:200px;}
+.field label{font-size:.78rem;font-weight:600;color:var(--ink-soft);letter-spacing:.02em;}
+.field .inrow{display:flex;gap:8px;}
+.field input[type=text], .field select{
+  font-family:"DM Sans",sans-serif;font-size:.92rem;color:var(--ink);
+  border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--paper);flex:1;
+}
+.field input[type=text]:focus,.field select:focus{outline:3px solid rgba(212,154,154,.35);outline-offset:1px;border-color:var(--blush-2);}
+
+/* ---------- Insight grid ---------- */
+.grid2{display:grid;gap:22px;margin-top:22px;}
+@media(min-width:900px){.grid2{grid-template-columns:1fr 1fr;}}
+
+.minihead{font-family:"Fraunces",serif;font-size:1.18rem;margin:0 0 14px;color:#4a3a35;display:flex;align-items:center;gap:10px;}
+.minihead .num{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--gold-deep);background:var(--skin-2);padding:3px 8px;border-radius:8px;}
+
+/* pseudocode */
+.code{font-family:"JetBrains Mono",monospace;font-size:.84rem;background:#FBF3EE;border:1px solid var(--line);border-radius:14px;padding:14px 6px;overflow-x:auto;}
+.code .ln{display:flex;gap:12px;padding:3px 14px;border-radius:7px;white-space:pre;color:#7a655c;transition:background .2s,color .2s;}
+.code .ln .n{color:#cdb6a8;width:18px;text-align:right;flex:none;user-select:none;}
+.code .ln.active{background:linear-gradient(90deg,rgba(195,154,92,.22),rgba(212,154,154,.12));color:#4a3a35;font-weight:500;box-shadow:inset 3px 0 0 var(--gold);}
+.code .kw{color:var(--pink-deep);}
+.code .fn{color:var(--gold-deep);}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.stat{background:linear-gradient(180deg,#FFF9F5,#FBEFE9);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+.stat .k{font-size:.74rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;}
+.stat .v{font-family:"Fraunces",serif;font-size:1.7rem;color:var(--pink-deep);line-height:1.1;margin-top:3px;}
+.stat .v small{font-size:.85rem;color:var(--ink-soft);font-family:"DM Sans";}
+
+.stack{display:flex;flex-direction:column-reverse;gap:7px;min-height:60px;}
+.frame{
+  font-family:"JetBrains Mono",monospace;font-size:.78rem;color:#7a655c;
+  background:#FBF3EE;border:1px solid var(--line);border-radius:10px;padding:8px 12px;
+  display:flex;justify-content:space-between;gap:10px;transition:.2s;
+}
+.frame.top{background:linear-gradient(90deg,rgba(195,154,92,.2),rgba(212,154,154,.12));color:#4a3a35;border-color:var(--gold-soft);font-weight:500;}
+.frame .pv{color:var(--gold-deep);}
+.stack-empty{font-size:.82rem;color:#c0ada3;font-style:italic;}
+
+/* recursion tree */
+.treewrap{margin-top:22px;padding:26px;}
+.tree-scroll{overflow-x:auto;padding:8px 0 4px;}
+svg.tree{display:block;margin:0 auto;}
+.tnode circle{transition:fill .25s, stroke .25s, r .25s;}
+.tnode .lab{font-family:"JetBrains Mono",monospace;font-size:12px;fill:#fff;font-weight:600;}
+.tnode .rng{font-family:"JetBrains Mono",monospace;font-size:9.5px;fill:#a08d83;}
+.tedge{stroke:#E4D2C6;stroke-width:2;fill:none;transition:stroke .25s;}
+.tnode.pending circle{fill:#EFE2DA;stroke:#E4D2C6;stroke-width:2;}
+.tnode.pending .lab{fill:#c3b0a5;}
+.tnode.stack circle{fill:#D49A9A;stroke:#fff;stroke-width:2.5;}
+.tnode.active circle{fill:var(--gold);stroke:#fff;stroke-width:3;}
+.tnode.done circle{fill:var(--sage);stroke:#fff;stroke-width:2;}
+.tedge.lit{stroke:var(--gold-soft);}
+
+/* ---------- Prose sections ---------- */
+.section{margin:54px 0;}
+.sectionhead{text-align:center;margin-bottom:30px;}
+.sectionhead .eyebrow{margin-bottom:10px;}
+.sectionhead h2{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(1.8rem,4vw,2.7rem);margin:0;color:#4a3a35;}
+.sectionhead p{color:var(--ink-soft);max-width:560px;margin:12px auto 0;}
+
+.cards3{display:grid;gap:20px;}
+@media(min-width:820px){.cards3{grid-template-columns:repeat(3,1fr);}}
+.icard{padding:26px;}
+.icard .step-n{font-family:"Fraunces",serif;font-style:italic;font-size:2.2rem;color:var(--gold-soft);line-height:1;}
+.icard h3{font-family:"Fraunces",serif;font-weight:500;font-size:1.25rem;margin:10px 0 8px;color:#4a3a35;}
+.icard p{color:var(--ink-soft);font-size:.96rem;margin:0;}
+
+.prose{padding:30px 32px;}
+.prose p{color:#5e4a44;}
+.prose h3{font-family:"Fraunces",serif;font-weight:500;color:#4a3a35;font-size:1.3rem;margin:26px 0 8px;}
+.prose h3:first-child{margin-top:0;}
+.prose ul{padding-left:20px;color:#5e4a44;}
+.prose li{margin:6px 0;}
+.prose code{font-family:"JetBrains Mono",monospace;font-size:.85em;background:var(--skin-2);padding:2px 6px;border-radius:6px;color:var(--gold-deep);}
+
+/* complexity table */
+.ctable{width:100%;border-collapse:collapse;font-size:.95rem;overflow:hidden;border-radius:14px;}
+.ctable th,.ctable td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);}
+.ctable thead th{background:linear-gradient(180deg,#FBEFE9,#F7E4DB);font-weight:600;color:#5a4540;font-family:"DM Sans";font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;}
+.ctable tbody tr:last-child td{border-bottom:none;}
+.ctable td.big{font-family:"JetBrains Mono",monospace;color:var(--pink-deep);font-weight:600;}
+.ctable .good{color:var(--sage-deep);}
+.ctable .bad{color:#c87f7f;}
+.ctable td.case{font-weight:600;color:#5a4540;}
+
+.pillrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.pill{font-size:.84rem;background:var(--skin-2);border:1px solid var(--line);color:#6a564e;padding:7px 13px;border-radius:30px;}
+.pill.yes::before{content:"✓ ";color:var(--sage-deep);font-weight:700;}
+.pill.no::before{content:"✕ ";color:#c87f7f;font-weight:700;}
+
+footer{text-align:center;padding:50px 20px 60px;color:var(--ink-soft);font-size:.88rem;}
+footer .heart{color:var(--pink);}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto;}
+}
+.fade{opacity:0;transform:translateY(14px);}
+.fade.in{opacity:1;transform:none;transition:opacity .7s ease, transform .7s ease;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="glyph">Q</span> Quick Sort Studio</div>
+  <nav class="topnav">
+    <a href="merge-sort.html">Merge</a>
+    <a href="heap-sort.html">Heap</a>
+    <a href="insertion-sort.html">Insertion</a>
+    <a href="bubble-sort.html">Bubble</a>
+    <a href="selection-sort.html">Selection</a>
+    <a href="bucket-sort.html">Bucket</a>
+    <a href="radix-sort.html">Radix</a>
+    <a href="counting-sort.html">Counting</a>
+  </nav>
+</div>
+
+<header class="hero wrap">
+  <div class="eyebrow">Divide · Partition · Conquer</div>
+  <h1>Watch <span class="gold">Quick&nbsp;Sort</span><br>think out&nbsp;<em>loud</em>.</h1>
+  <p>Pick a pivot, partition the rest, then sort each side. Press play and follow every comparison, swap, and recursive call — one gentle step at a time.</p>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ VISUALIZER ============ -->
+  <section id="visualizer" class="panel studio">
+    <div class="stage-head">
+      <div>
+        <h2>The array, in motion</h2>
+        <div class="sub">Bar height is the value. Colours show what the algorithm is looking at right now.</div>
+      </div>
+      <div class="legend">
+        <span><i class="chip range"></i>In range</span>
+        <span><i class="chip compare"></i>Comparing</span>
+        <span><i class="chip pivot"></i>Pivot</span>
+        <span><i class="chip swap"></i>Swapping</span>
+        <span><i class="chip sorted"></i>Sorted</span>
+        <span><i class="chip dim"></i>Resting</span>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="bars" id="bars"></div>
+    </div>
+
+    <div class="narration">
+      <div class="dot">✶</div>
+      <div class="text" id="narration">Press <b>Play</b> to begin sorting.</div>
+    </div>
+
+    <div class="controls">
+      <div class="scrub">
+        <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Step scrubber" />
+        <div class="steplabel" id="steplabel">step 0 / 0</div>
+      </div>
+      <div class="btnrow">
+        <button class="btn" id="back" title="Previous step (←)" aria-label="Previous step">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Back
+        </button>
+        <button class="btn primary" id="playBtn" title="Play / Pause (space)" aria-label="Play quick sort visualization" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play
+        </button>
+        <button class="btn" id="fwd" title="Next step (→)" aria-label="Next step">
+          Step <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <button class="btn" id="reset" title="Restart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Restart
+        </button>
+        <div class="spacer"></div>
+        <div class="speedbox">
+          <span>Slow</span><input type="range" id="speed" min="120" max="1400" value="760" step="20" aria-label="Speed" /><span>Fast</span>
+        </div>
+      </div>
+
+      <div class="config">
+        <div class="field">
+          <label for="custom">Your own numbers (comma separated, up to 12)</label>
+          <div class="inrow">
+            <input type="text" id="custom" placeholder="e.g. 29, 10, 14, 37, 13, 21, 6, 25" />
+            <button class="btn gold" id="apply">Sort it</button>
+          </div>
+        </div>
+        <div class="field" style="max-width:230px;flex:0 0 230px;">
+          <label for="pivot">Pivot strategy</label>
+          <select id="pivot">
+            <option value="last">Last element (Lomuto)</option>
+            <option value="first">First element</option>
+            <option value="middle">Middle element</option>
+            <option value="median">Median of three</option>
+            <option value="random">Random</option>
+          </select>
+        </div>
+        <div class="field" style="max-width:150px;flex:0 0 150px;justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <button class="btn" id="rand">🎲 Shuffle new</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- pseudocode + stats -->
+    <div class="grid2">
+      <div>
+        <div class="minihead"><span class="num">CODE</span> Pseudocode, line by line</div>
+        <div class="code" id="code"></div>
+      </div>
+      <div>
+        <div class="minihead"><span class="num">DATA</span> What it costs, live</div>
+        <div class="stats">
+          <div class="stat"><div class="k">Comparisons</div><div class="v" id="st-cmp">0</div></div>
+          <div class="stat"><div class="k">Swaps</div><div class="v" id="st-swap">0</div></div>
+          <div class="stat"><div class="k">Recursion depth</div><div class="v" id="st-depth">0</div></div>
+          <div class="stat"><div class="k">Elements</div><div class="v" id="st-n">0</div></div>
+        </div>
+        <div class="minihead" style="margin-top:22px;"><span class="num">STACK</span> Call stack (top is running)</div>
+        <div class="stack" id="stack"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECURSION TREE ============ -->
+  <section class="panel treewrap">
+    <div class="stage-head">
+      <div>
+        <h2>The recursion tree</h2>
+        <div class="sub">Each node is a sub-array. Gold is sorting now, pink is waiting on the stack, sage is finished.</div>
+      </div>
+    </div>
+    <div class="tree-scroll"><svg class="tree" id="tree"></svg></div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how" class="section">
+    <div class="sectionhead">
+      <div class="eyebrow fade">The big idea</div>
+      <h2 class="fade">Three moves, repeated</h2>
+      <p class="fade">Quick Sort is a divide-and-conquer algorithm. It never sorts the whole list at once — it keeps placing one element perfectly, then trusting recursion for the rest.</p>
+    </div>
+    <div class="cards3">
+      <div class="panel icard fade">
+        <div class="step-n">i.</div>
+        <h3>Choose a pivot</h3>
+        <p>Pick one element as the reference point. Everything else will be measured against it. Here the pivot defaults to the last element of the current range.</p>
+      </div>
+      <div class="panel icard fade">
+        <div class="step-n">ii.</div>
+        <h3>Partition</h3>
+        <p>Walk through the range and shuffle values so that everything smaller than the pivot ends up on its left, everything larger on its right. The pivot lands in its final, sorted home.</p>
+      </div>
+      <div class="panel icard fade">
+        <div class="step-n">iii.</div>
+        <h3>Conquer each side</h3>
+        <p>The two sides are now independent, smaller sorting problems. Apply the exact same recipe to each, until ranges shrink to a single element — already sorted.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTITION DEEP DIVE ============ -->
+  <section class="panel prose fade">
+    <h3>Inside the partition (Lomuto scheme)</h3>
+    <p>The visualizer uses the Lomuto partition because it maps cleanly to what you see on screen. Two markers do all the work:</p>
+    <ul>
+      <li><b>j</b> — the scanner. It visits every element in the range except the pivot, asking a single question: “are you smaller than or equal to the pivot?”</li>
+      <li><b>i</b> — the boundary. It marks the edge of the “smaller” region. Whenever <code>j</code> finds a small value, <code>i</code> steps forward and the two values swap, growing the smaller region by one.</li>
+    </ul>
+    <p>When the scan finishes, every value left of the boundary is smaller than the pivot and everything right is larger. One last swap drops the pivot exactly between them — and that position is now permanently correct. The range splits there and recursion takes over.</p>
+  </section>
+
+  <!-- ============ COMPLEXITY ============ -->
+  <section id="cost" class="section">
+    <div class="sectionhead">
+      <div class="eyebrow fade">What it costs</div>
+      <h2 class="fade">Fast on average, fragile at worst</h2>
+      <p class="fade">Quick Sort is usually the fastest general-purpose sort in practice — but a careless pivot on already-sorted data can drag it down to quadratic time.</p>
+    </div>
+    <div class="panel prose fade" style="margin-bottom:22px;">
+      <h3>When to use Quick Sort</h3>
+      <p>Use Quick Sort when you want fast in-memory sorting, stability does not matter, and you can choose a pivot strategy that avoids consistently unbalanced partitions.</p>
+      <ul>
+        <li>General-purpose sorting for arrays held in memory.</li>
+        <li>Cases where low extra memory use is important.</li>
+        <li>Data where average-case speed matters more than stable ordering.</li>
+      </ul>
+    </div>
+    <div class="panel prose fade" style="padding:8px 8px;">
+      <table class="ctable">
+        <thead>
+          <tr><th>Case</th><th>Time</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="case good">Best</td><td class="big">O(n log n)</td><td>Each pivot splits its range roughly in half, giving a shallow, balanced tree.</td></tr>
+          <tr><td class="case">Average</td><td class="big">O(n log n)</td><td>Random data tends to split reasonably well, so this is the everyday cost.</td></tr>
+          <tr><td class="case bad">Worst</td><td class="big">O(n²)</td><td>Pivots that are always the smallest or largest (e.g. last-element pivot on sorted input) create a lopsided tree of depth n.</td></tr>
+          <tr><td class="case">Space</td><td class="big">O(log n)</td><td>In-place sorting; the only extra memory is the recursion stack, log-deep when balanced.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="text-align:center;color:var(--ink-soft);margin-top:18px;font-size:.95rem;" class="fade">Try the <b>Median of three</b> or <b>Random</b> pivot on a sorted array to watch the worst case soften.</p>
+
+    <div class="pillrow fade" style="justify-content:center;margin-top:24px;">
+      <span class="pill no">Not stable</span>
+      <span class="pill yes">In-place</span>
+      <span class="pill yes">Cache-friendly</span>
+      <span class="pill yes">Divide &amp; conquer</span>
+      <span class="pill yes">Comparison sort</span>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Built as an interactive lesson — pick a pivot and press play.<br>
+  Quick Sort Studio · made with a <span class="heart">♥</span> for clear algorithms.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Pseudocode (Lomuto) ---------- */
+  var CODE = [
+    {n:1,  html:'<span class="fn">quickSort</span>(A, lo, hi)'},
+    {n:2,  html:'  <span class="kw">if</span> lo &lt; hi'},
+    {n:3,  html:'    p = <span class="fn">partition</span>(A, lo, hi)'},
+    {n:4,  html:'    <span class="fn">quickSort</span>(A, lo, p-1)'},
+    {n:5,  html:'    <span class="fn">quickSort</span>(A, p+1, hi)'},
+    {n:6,  html:''},
+    {n:7,  html:'<span class="fn">partition</span>(A, lo, hi)'},
+    {n:8,  html:'  pivot = A[hi]'},
+    {n:9,  html:'  i = lo - 1'},
+    {n:10, html:'  <span class="kw">for</span> j = lo <span class="kw">to</span> hi-1'},
+    {n:11, html:'    <span class="kw">if</span> A[j] &le; pivot'},
+    {n:12, html:'      i = i + 1'},
+    {n:13, html:'      swap A[i], A[j]'},
+    {n:14, html:'  swap A[i+1], A[hi]'},
+    {n:15, html:'  <span class="kw">return</span> i + 1'}
+  ];
+
+  var codeEl = document.getElementById('code');
+  CODE.forEach(function(c){
+    var d = document.createElement('div');
+    d.className = 'ln';
+    d.dataset.line = c.n;
+    d.innerHTML = '<span class="n">'+c.n+'</span><span>'+c.html+'</span>';
+    codeEl.appendChild(d);
+  });
+  var codeLines = Array.prototype.slice.call(codeEl.querySelectorAll('.ln'));
+
+  /* ---------- State ---------- */
+  var arr = [29,10,14,37,13,21,6,25];
+  var steps = [];
+  var nodes = [];
+  var cur = 0;
+  var playing = false;
+  var timer = null;
+  var strategy = 'last';
+
+  /* ---------- Step generator ---------- */
+  function buildSteps(input){
+    var a = input.slice();
+    var n = a.length;
+    steps = [];
+    nodes = [];
+    var sorted = new Array(n).fill(false);
+    var comparisons = 0, swaps = 0, maxDepth = 0;
+    var nid = 0;
+
+    function snap(extra){
+      var base = {
+        array:a.slice(), sorted:sorted.slice(), range:null,
+        pivotIndex:-1, i:-1, j:-1, swap:null, compare:null,
+        line:0, nodeId:(extra && extra.nodeId!==undefined)?extra.nodeId:-1,
+        desc:'', comparisons:comparisons, swaps:swaps, action:''
+      };
+      for(var k in extra){ base[k]=extra[k]; }
+      steps.push(base);
+    }
+    function sw(x,y){ var t=a[x]; a[x]=a[y]; a[y]=t; }
+
+    function choosePivot(lo,hi){
+      switch(strategy){
+        case 'first': return lo;
+        case 'middle': return (lo+hi)>>1;
+        case 'random': return lo + Math.floor(Math.random()*(hi-lo+1));
+        case 'median':
+          var mid=(lo+hi)>>1;
+          var t=[[a[lo],lo],[a[mid],mid],[a[hi],hi]].sort(function(p,q){return p[0]-q[0];});
+          return t[1][1];
+        default: return hi;
+      }
+    }
+
+    function qs(lo,hi,depth,parentId){
+      if(lo>hi) return;
+      if(depth>maxDepth) maxDepth=depth;
+      var node={id:nid++, lo:lo, hi:hi, depth:depth, parentId:parentId,
+                children:[], pivotValue:null, startStep:steps.length, endStep:-1};
+      nodes.push(node);
+      if(parentId!==null) nodes[parentId].children.push(node.id);
+
+      snap({line:1, range:[lo,hi], nodeId:node.id, action:'enter',
+            desc:'Call quickSort on indices '+lo+'–'+hi+'.'});
+
+      if(lo===hi){
+        sorted[lo]=true; node.pivotValue=a[lo];
+        snap({line:2, range:[lo,hi], nodeId:node.id, action:'sorted',
+              desc:'A single element (index '+lo+') is already sorted.'});
+        node.endStep=steps.length-1;
+        return;
+      }
+      snap({line:2, range:[lo,hi], nodeId:node.id, action:'check',
+            desc:'lo &lt; hi, so this range needs partitioning.'});
+
+      var pIdx = choosePivot(lo,hi);
+      if(pIdx!==hi){
+        snap({line:8, range:[lo,hi], pivotIndex:pIdx, nodeId:node.id, action:'pick',
+              desc:'Chosen pivot is '+a[pIdx]+' (index '+pIdx+'). Move it to the end first.'});
+        sw(pIdx,hi); swaps++;
+        snap({line:8, range:[lo,hi], pivotIndex:hi, swap:[pIdx,hi], nodeId:node.id, action:'swap',
+              desc:'Pivot '+a[hi]+' is now parked at index '+hi+'.'});
+      }
+      var pivot=a[hi]; node.pivotValue=pivot;
+      snap({line:8, range:[lo,hi], pivotIndex:hi, nodeId:node.id, action:'pivot',
+            desc:'Pivot = '+pivot+'.'});
+      var i=lo-1;
+      snap({line:9, range:[lo,hi], pivotIndex:hi, i:i, nodeId:node.id, action:'init',
+            desc:'Boundary i starts at '+i+' (just before the range).'});
+
+      for(var j=lo;j<hi;j++){
+        comparisons++;
+        snap({line:11, range:[lo,hi], pivotIndex:hi, i:i, j:j, compare:[j,hi], nodeId:node.id, action:'compare',
+              desc:'Is A['+j+'] = '+a[j]+' &le; pivot '+pivot+' ?'});
+        if(a[j]<=pivot){
+          i++;
+          snap({line:12, range:[lo,hi], pivotIndex:hi, i:i, j:j, nodeId:node.id, action:'adv',
+                desc:'Yes. Move boundary to i = '+i+'.'});
+          if(i!==j){
+            sw(i,j); swaps++;
+            snap({line:13, range:[lo,hi], pivotIndex:hi, i:i, j:j, swap:[i,j], nodeId:node.id, action:'swap',
+                  desc:'Swap A['+i+'] and A['+j+'] so the smaller value moves left.'});
+          } else {
+            snap({line:13, range:[lo,hi], pivotIndex:hi, i:i, j:j, nodeId:node.id, action:'noswap',
+                  desc:'Already in place (i = j) — no swap needed.'});
+          }
+        } else {
+          snap({line:11, range:[lo,hi], pivotIndex:hi, i:i, j:j, nodeId:node.id, action:'skip',
+                desc:'No, '+a[j]+' &gt; '+pivot+'. Leave it on the right.'});
+        }
+      }
+      sw(i+1,hi); swaps++;
+      var p=i+1; sorted[p]=true;
+      snap({line:14, range:[lo,hi], pivotIndex:p, swap:[i+1,hi], nodeId:node.id, action:'place',
+            desc:'Drop the pivot into place: swap A['+(i+1)+'] and A['+hi+'].'});
+      snap({line:15, range:[lo,hi], pivotIndex:p, nodeId:node.id, action:'done',
+            desc:'Pivot '+pivot+' is locked at index '+p+'. Left side &lt; pivot, right side &gt; pivot.'});
+
+      snap({line:4, range:[lo,p-1], pivotIndex:p, nodeId:node.id, action:'recL',
+            desc: (lo<=p-1?('Recurse on the left part, indices '+lo+'–'+(p-1)+'.'):'Left part is empty — nothing to sort.')});
+      qs(lo,p-1,depth+1,node.id);
+      snap({line:5, range:[p+1,hi], pivotIndex:p, nodeId:node.id, action:'recR',
+            desc: (p+1<=hi?('Recurse on the right part, indices '+(p+1)+'–'+hi+'.'):'Right part is empty — nothing to sort.')});
+      qs(p+1,hi,depth+1,node.id);
+
+      node.endStep=steps.length-1;
+    }
+
+    if(n===0){
+      snap({line:0, action:'empty', desc:'The array is empty.'});
+    } else {
+      qs(0,n-1,0,null);
+      for(var k=0;k<n;k++) sorted[k]=true;
+      snap({line:0, range:[0,n-1], nodeId:-1, action:'finished',
+            desc:'Sorted! The whole array is now in order.'});
+    }
+    steps._comparisons=comparisons;
+    steps._swaps=swaps;
+    steps._maxDepth=maxDepth+1;
+  }
+
+  /* ---------- Bars ---------- */
+  var barsEl = document.getElementById('bars');
+  var barCols = [];
+  function ensureBars(n){
+    if(barCols.length===n) return;
+    barsEl.innerHTML='';
+    barCols=[];
+    for(var k=0;k<n;k++){
+      var col=document.createElement('div');
+      col.className='col';
+      var val=document.createElement('div'); val.className='val';
+      var track=document.createElement('div'); track.className='bar-track';
+      var bar=document.createElement('div'); bar.className='bar';
+      var idx=document.createElement('div'); idx.className='idx'; idx.textContent=k;
+      var ptrs=document.createElement('div'); ptrs.className='ptrs';
+      col.setAttribute('role','button');
+      col.setAttribute('tabindex','0');
+      col.dataset.index=k;
+      col.addEventListener('click', function(e){ inspectBar(+e.currentTarget.dataset.index); });
+      col.addEventListener('keydown', function(e){
+        if(e.key==='Enter' || e.key===' '){ inspectBar(+e.currentTarget.dataset.index); e.preventDefault(); e.stopPropagation(); }
+      });
+      track.appendChild(bar);
+      col.appendChild(val); col.appendChild(track); col.appendChild(idx); col.appendChild(ptrs);
+      barsEl.appendChild(col);
+      barCols.push({col:col,val:val,bar:bar,idx:idx,ptrs:ptrs});
+    }
+  }
+  function renderBars(s){
+    var n = s.array.length;
+    var max = Math.max.apply(null, s.array.concat([1]));
+    ensureBars(n);
+    for(var k=0;k<n;k++){
+      var parts=barCols[k];
+      var col=parts.col;
+      var bar=parts.bar;
+      var inRange = s.range && k>=s.range[0] && k<=s.range[1];
+      var isSorted = s.sorted[k];
+      var isActive = k===s.pivotIndex || k===s.i || k===s.j || (s.swap && (k===s.swap[0]||k===s.swap[1])) || (s.compare && (k===s.compare[0]||k===s.compare[1]));
+      col.className='col';
+      col.setAttribute('aria-label','Index '+k+', value '+s.array[k]);
+      if(inRange && !isSorted) col.classList.add('inrange');
+      if(!inRange && !isSorted) col.classList.add('dim');
+      if(isActive) col.classList.add('active');
+
+      parts.val.textContent=s.array[k];
+      bar.style.height = Math.max(8, Math.round(s.array[k]/max*100)) + '%';
+      bar.className='bar';
+
+      if(isSorted) bar.classList.add('sorted');
+      else if(k===s.pivotIndex) bar.classList.add('pivot');
+      else if(s.swap && (k===s.swap[0]||k===s.swap[1])) bar.classList.add('swap');
+      else if(s.compare && (k===s.compare[0]||k===s.compare[1])) bar.classList.add('compare');
+
+      parts.ptrs.innerHTML='';
+
+      function addTag(cls,txt){
+        var t=document.createElement('span'); t.className='tag '+cls+' show'; t.textContent=txt; parts.ptrs.appendChild(t);
+      }
+      if(k===s.pivotIndex && !isSorted) addTag('p','pivot');
+      if(k===s.i && s.i>=0) addTag('i','i');
+      if(k===s.j && s.j>=0) addTag('j','j');
+    }
+  }
+  function inspectBar(index){
+    stop();
+    var s=steps[cur];
+    if(!s || index<0 || index>=s.array.length) return;
+    var labels=[];
+    if(s.sorted[index]) labels.push('already sorted');
+    if(index===s.pivotIndex) labels.push('pivot');
+    if(index===s.i) labels.push('boundary i');
+    if(index===s.j) labels.push('scanner j');
+    if(s.compare && (index===s.compare[0]||index===s.compare[1])) labels.push('being compared');
+    if(s.swap && (index===s.swap[0]||index===s.swap[1])) labels.push('being swapped');
+    if(!labels.length && s.range && index>=s.range[0] && index<=s.range[1]) labels.push('inside the active range');
+    if(!labels.length) labels.push('resting outside this call');
+    document.getElementById('narration').innerHTML='Index <b>'+index+'</b> holds <b>'+s.array[index]+'</b>: '+labels.join(', ')+'.';
+  }
+
+  /* ---------- Recursion tree ---------- */
+  var treeEl = document.getElementById('tree');
+  var treePos = {};
+  function buildTree(){
+    treeEl.innerHTML='';
+    treePos={};
+    if(!nodes.length) return;
+    var leaf=0, maxDepth=0;
+    function assign(id){
+      var nd=nodes[id];
+      if(nd.depth>maxDepth) maxDepth=nd.depth;
+      if(nd.children.length===0){ treePos[id]={x:leaf++,d:nd.depth}; }
+      else{
+        nd.children.forEach(assign);
+        var xs=nd.children.map(function(c){return treePos[c].x;});
+        treePos[id]={x:(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2,d:nd.depth};
+      }
+    }
+    assign(0);
+    var colW=Math.max(70, Math.min(110, 760/Math.max(1,leaf)));
+    var rowH=86, padX=40, padY=34, r=21;
+    var W=Math.max(360,(leaf-1)*colW + padX*2);
+    var H=(maxDepth)*rowH + padY*2 + 16;
+    treeEl.setAttribute('viewBox','0 0 '+W+' '+H);
+    treeEl.setAttribute('width', W);
+    treeEl.setAttribute('height', H);
+
+    function cx(id){ return padX + treePos[id].x*colW; }
+    function cy(id){ return padY + treePos[id].d*rowH; }
+
+    // edges first
+    nodes.forEach(function(nd){
+      nd.children.forEach(function(c){
+        var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+        var x1=cx(nd.id), y1=cy(nd.id)+r, x2=cx(c), y2=cy(c)-r;
+        var my=(y1+y2)/2;
+        path.setAttribute('d','M'+x1+' '+y1+' C '+x1+' '+my+' '+x2+' '+my+' '+x2+' '+y2);
+        path.setAttribute('class','tedge');
+        path.dataset.child=c;
+        treeEl.appendChild(path);
+      });
+    });
+    // nodes
+    nodes.forEach(function(nd){
+      var g=document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.setAttribute('class','tnode'); g.dataset.id=nd.id;
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',cx(nd.id)); c.setAttribute('cy',cy(nd.id)); c.setAttribute('r',r);
+      var lab=document.createElementNS('http://www.w3.org/2000/svg','text');
+      lab.setAttribute('class','lab'); lab.setAttribute('x',cx(nd.id)); lab.setAttribute('y',cy(nd.id)+4);
+      lab.setAttribute('text-anchor','middle'); lab.textContent=(nd.pivotValue!==null?nd.pivotValue:'·');
+      var rng=document.createElementNS('http://www.w3.org/2000/svg','text');
+      rng.setAttribute('class','rng'); rng.setAttribute('x',cx(nd.id)); rng.setAttribute('y',cy(nd.id)+r+13);
+      rng.setAttribute('text-anchor','middle'); rng.textContent=nd.lo+'–'+nd.hi;
+      g.appendChild(c); g.appendChild(lab); g.appendChild(rng);
+      treeEl.appendChild(g);
+    });
+  }
+  function updateTree(s, S){
+    var tnodes=treeEl.querySelectorAll('.tnode');
+    Array.prototype.forEach.call(tnodes,function(g){
+      var id=+g.dataset.id; var nd=nodes[id];
+      var cls='tnode ';
+      if(nd.startStep>S) cls+='pending';
+      else if(nd.endStep!==-1 && S>nd.endStep) cls+='done';
+      else cls+=(s.nodeId===id?'active':'stack');
+      g.setAttribute('class',cls);
+    });
+    var edges=treeEl.querySelectorAll('.tedge');
+    Array.prototype.forEach.call(edges,function(e){
+      var c=+e.dataset.child; var nd=nodes[c];
+      e.setAttribute('class','tedge'+(nd.startStep<=S?' lit':''));
+    });
+  }
+
+  /* ---------- Stats / stack ---------- */
+  var stackEl=document.getElementById('stack');
+  function updateStats(s,S){
+    document.getElementById('st-cmp').textContent=s.comparisons;
+    document.getElementById('st-swap').textContent=s.swaps;
+    document.getElementById('st-n').textContent=s.array.length;
+    // call stack = in-progress nodes
+    var live=[];
+    nodes.forEach(function(nd){
+      if(nd.startStep<=S && (nd.endStep===-1 || S<=nd.endStep)) live.push(nd);
+    });
+    live.sort(function(a,b){return a.depth-b.depth;});
+    document.getElementById('st-depth').textContent=live.length;
+    stackEl.innerHTML='';
+    if(!live.length){
+      var e=document.createElement('div'); e.className='stack-empty';
+      e.textContent = S>=steps.length-1 ? 'Empty — all calls returned.' : '—';
+      stackEl.appendChild(e);
+    } else {
+      live.forEach(function(nd,ix){
+        var f=document.createElement('div');
+        f.className='frame'+(s.nodeId===nd.id?' top':'');
+        f.innerHTML='<span>quickSort('+nd.lo+', '+nd.hi+')</span><span class="pv">pivot '+(nd.pivotValue!==null?nd.pivotValue:'…')+'</span>';
+        stackEl.appendChild(f);
+      });
+    }
+  }
+
+  /* ---------- Render a step ---------- */
+  function render(S){
+    cur=S;
+    var s=steps[S];
+    renderBars(s);
+    codeLines.forEach(function(ln){
+      ln.classList.toggle('active', (+ln.dataset.line)===s.line && s.line!==0);
+    });
+    document.getElementById('narration').innerHTML=s.desc;
+    updateStats(s,S);
+    updateTree(s,S);
+    var scrub=document.getElementById('scrub');
+    scrub.value=S;
+    document.getElementById('steplabel').textContent='step '+(S+1)+' / '+steps.length;
+    document.getElementById('back').disabled = S<=0;
+    document.getElementById('fwd').disabled = S>=steps.length-1;
+  }
+
+  /* ---------- Playback ---------- */
+  var playBtn=document.getElementById('playBtn');
+  function setPlayIcon(){
+    playBtn.innerHTML = playing
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg> Pause'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play';
+    playBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    playBtn.setAttribute('aria-label', playing ? 'Pause quick sort visualization' : 'Play quick sort visualization');
+  }
+  function tick(){
+    if(!playing) return;
+    if(cur>=steps.length-1){ stop(); return; }
+    render(cur+1);
+    if(cur>=steps.length-1){ stop(); return; }
+    var delay = 1520 - +document.getElementById('speed').value;
+    timer=setTimeout(tick, Math.max(80,delay));
+  }
+  function play(){
+    if(cur>=steps.length-1) render(0);
+    playing=true; setPlayIcon(); tick();
+  }
+  function stop(){ playing=false; setPlayIcon(); if(timer){clearTimeout(timer);timer=null;} }
+  playBtn.addEventListener('click', function(){ playing?stop():play(); });
+
+  document.getElementById('fwd').addEventListener('click', function(){ stop(); if(cur<steps.length-1) render(cur+1); });
+  document.getElementById('back').addEventListener('click', function(){ stop(); if(cur>0) render(cur-1); });
+  document.getElementById('reset').addEventListener('click', function(){ stop(); render(0); });
+  document.getElementById('scrub').addEventListener('input', function(e){ stop(); render(+e.target.value); });
+
+  document.getElementById('speed').addEventListener('input', function(){
+    if(playing){ if(timer)clearTimeout(timer); timer=setTimeout(tick, Math.max(80,1520-+document.getElementById('speed').value)); }
+  });
+
+  /* ---------- New data ---------- */
+  function rebuild(newArr){
+    stop();
+    arr=newArr;
+    buildSteps(arr);
+    buildTree();
+    var scrub=document.getElementById('scrub');
+    scrub.max=steps.length-1; scrub.value=0;
+    render(0);
+  }
+  document.getElementById('pivot').addEventListener('change', function(e){
+    strategy=e.target.value; rebuild(arr.slice());
+  });
+  document.getElementById('rand').addEventListener('click', function(){
+    var n=6+Math.floor(Math.random()*5);
+    var a=[]; for(var k=0;k<n;k++) a.push(2+Math.floor(Math.random()*97));
+    document.getElementById('custom').value='';
+    rebuild(a);
+  });
+  document.getElementById('apply').addEventListener('click', applyCustom);
+  document.getElementById('custom').addEventListener('keydown', function(e){ if(e.key==='Enter') applyCustom(); });
+  function applyCustom(){
+    var input=document.getElementById('custom');
+    var raw=input.value.trim();
+    var tokens=raw ? raw.split(/[\s,]+/).filter(Boolean) : [];
+    var invalid=tokens.filter(function(x){ return !/^-?\d+$/.test(x); });
+    if(invalid.length){
+      document.getElementById('narration').innerHTML='Please use whole numbers separated by commas or spaces.';
+      return;
+    }
+    var parts=tokens.map(function(x){return parseInt(x,10);});
+    parts=parts.slice(0,12).map(function(x){return Math.max(1,Math.min(120,x));});
+    if(parts.length<2){
+      document.getElementById('narration').innerHTML='Please enter at least two numbers, e.g. <b>5, 2, 9, 1</b>.';
+      return;
+    }
+    input.value=parts.join(', ');
+    rebuild(parts);
+  }
+
+  /* ---------- Keyboard ---------- */
+  document.addEventListener('keydown', function(e){
+    if(['INPUT','SELECT','TEXTAREA'].indexOf(document.activeElement.tagName)>=0) return;
+    if(e.key==='ArrowRight'){ stop(); if(cur<steps.length-1) render(cur+1); e.preventDefault(); }
+    else if(e.key==='ArrowLeft'){ stop(); if(cur>0) render(cur-1); e.preventDefault(); }
+    else if(e.key===' '){ playing?stop():play(); e.preventDefault(); }
+  });
+
+  /* ---------- Scroll reveal ---------- */
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.fade').forEach(function(el){ io.observe(el); });
+
+  /* ---------- Boot ---------- */
+  buildSteps(arr); buildTree();
+  document.getElementById('scrub').max=steps.length-1;
+  render(0);
+})();
+</script>
+</body>
+</html>

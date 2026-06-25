@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sorting Algorithm Visualizer</title>
+<meta name="description" content="A main page for linked sorting algorithm visualizers with a comparison table." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="sorting-theme.css" />
+<style>
+.algo-list{display:grid;gap:14px;margin:28px 0 0;padding:0;list-style:none;}
+@media(min-width:760px){.algo-list{grid-template-columns:repeat(3,1fr);}}
+.algo-list a{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(180deg,#FFFDFB,#FFF7F2);
+  box-shadow:var(--shadow-soft);
+  color:#4a3a35;
+  font-weight:700;
+  text-decoration:none;
+  transition:transform .15s,box-shadow .2s,border-color .2s;
+}
+.algo-list a:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--blush-2);}
+.algo-list span{font-family:"JetBrains Mono",monospace;font-size:.75rem;color:var(--gold-deep);}
+.table-scroll{overflow-x:auto;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><span class="glyph">S</span> Sorting Algorithm Visualizer</div>
+  <nav class="topnav">
+    <a href="quicksort.html">Quick</a>
+    <a href="merge-sort.html">Merge</a>
+    <a href="heap-sort.html">Heap</a>
+    <a href="insertion-sort.html">Insertion</a>
+    <a href="bubble-sort.html">Bubble</a>
+    <a href="selection-sort.html">Selection</a>
+    <a href="bucket-sort.html">Bucket</a>
+    <a href="radix-sort.html">Radix</a>
+    <a href="counting-sort.html">Counting</a>
+  </nav>
+</div>
+
+<header class="hero wrap">
+  <div class="eyebrow">Compare - Choose - Visualize</div>
+  <h1>Sorting Algorithm Visualizer</h1>
+  <p>Pick an algorithm to open its step-by-step visualizer, then compare the main time, space, and stability tradeoffs below.</p>
+</header>
+
+<main class="wrap">
+  <section class="section">
+    <div class="sectionhead">
+      <div class="eyebrow">Algorithms</div>
+      <h2>Choose a visualizer</h2>
+    </div>
+    <ul class="algo-list">
+      <li><a href="quicksort.html">Quick Sort <span>Open</span></a></li>
+      <li><a href="merge-sort.html">Merge Sort <span>Open</span></a></li>
+      <li><a href="heap-sort.html">Heap Sort <span>Open</span></a></li>
+      <li><a href="insertion-sort.html">Insertion Sort <span>Open</span></a></li>
+      <li><a href="bubble-sort.html">Bubble Sort <span>Open</span></a></li>
+      <li><a href="selection-sort.html">Selection Sort <span>Open</span></a></li>
+      <li><a href="bucket-sort.html">Bucket Sort <span>Open</span></a></li>
+      <li><a href="radix-sort.html">Radix Sort <span>Open</span></a></li>
+      <li><a href="counting-sort.html">Counting Sort <span>Open</span></a></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="sectionhead">
+      <div class="eyebrow">In good company</div>
+      <h2>How it stacks up</h2>
+    </div>
+    <div class="panel prose" style="padding:8px;">
+      <div class="table-scroll">
+        <table class="ctable">
+          <thead>
+            <tr><th>Algorithm</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="case">Quick Sort</td><td class="big">O(n log n)</td><td class="big">O(n²)</td><td>O(log n)</td><td class="bad">No</td></tr>
+            <tr><td class="case">Merge Sort</td><td class="big">O(n log n)</td><td class="big">O(n log n)</td><td>O(n)</td><td class="good">Yes</td></tr>
+            <tr><td class="case">Heap Sort</td><td class="big">O(n log n)</td><td class="big">O(n log n)</td><td>O(1)</td><td class="bad">No</td></tr>
+            <tr><td class="case">Insertion Sort</td><td class="big">O(n²)</td><td class="big">O(n²)</td><td>O(1)</td><td class="good">Yes</td></tr>
+            <tr><td class="case">Bubble Sort</td><td class="big">O(n²)</td><td class="big">O(n²)</td><td>O(1)</td><td class="good">Yes</td></tr>
+            <tr><td class="case">Selection Sort</td><td class="big">O(n²)</td><td class="big">O(n²)</td><td>O(1)</td><td class="bad">No</td></tr>
+            <tr><td class="case">Bucket Sort</td><td class="big">O(n + k)</td><td class="big">O(n²)</td><td>O(n + k)</td><td>Depends</td></tr>
+            <tr><td class="case">Radix Sort</td><td class="big">O(d(n + b))</td><td class="big">O(d(n + b))</td><td>O(n + b)</td><td class="good">Yes</td></tr>
+            <tr><td class="case">Counting Sort</td><td class="big">O(n + k)</td><td class="big">O(n + k)</td><td>O(k)</td><td class="good">Can be stable</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Made By Shajia Siddiqa<br>
+   
+</footer>
+</body>
+</html>

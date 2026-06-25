@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Merge Sort - An Interactive Visualizer</title>
+<meta name="description" content="A soft, step-by-step Merge Sort visualizer with comparisons, writes, passes, pseudocode, and complexity notes." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="sorting-theme.css" />
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><span class="glyph">M</span> Merge Sort Studio</div>
+  <nav class="topnav">
+    <a href="quicksort.html">Quick</a><a href="heap-sort.html">Heap</a><a href="insertion-sort.html">Insertion</a><a href="bubble-sort.html">Bubble</a><a href="selection-sort.html">Selection</a><a href="bucket-sort.html">Bucket</a><a href="radix-sort.html">Radix</a><a href="counting-sort.html">Counting</a>
+  </nav>
+</div>
+<header class="hero wrap">
+  <div class="eyebrow">Divide - Merge - Stabilize</div>
+  <h1>Watch <span class="gold">Merge Sort</span><br>build order <em>back up</em>.</h1>
+  <p>Split the array into tiny sorted pieces, then merge those pieces back together while always choosing the smaller front value.</p>
+</header>
+<main class="wrap">
+  <section id="visualizer" class="panel studio">
+    <div class="stage-head">
+      <div><h2>The array, in motion</h2><div class="sub">Bar height is the value. Colours show comparisons, writes, active ranges, and sorted runs.</div></div>
+      <div class="legend"><span><i class="chip range"></i>Active range</span><span><i class="chip compare"></i>Comparing</span><span><i class="chip pivot"></i>Writing</span><span><i class="chip swap"></i>Moving</span><span><i class="chip sorted"></i>Sorted</span><span><i class="chip dim"></i>Resting</span></div>
+    </div>
+    <div class="stage"><div class="bars" id="bars"></div></div>
+    <div class="narration"><div class="dot">*</div><div class="text" id="narration">Press <b>Play</b> to begin sorting.</div></div>
+    <div class="controls">
+      <div class="scrub"><input type="range" id="scrub" min="0" max="0" value="0" aria-label="Step scrubber" /><div class="steplabel" id="steplabel">step 0 / 0</div></div>
+      <div class="btnrow">
+        <button class="btn" id="back">Back</button><button class="btn primary" id="playBtn" aria-pressed="false">Play</button><button class="btn" id="fwd">Step</button><button class="btn" id="reset">Restart</button>
+        <div class="spacer"></div><div class="speedbox"><span>Slow</span><input type="range" id="speed" min="120" max="1400" value="760" step="20" aria-label="Speed" /><span>Fast</span></div>
+      </div>
+      <div class="config">
+        <div class="field"><label for="custom">Your own numbers (comma separated, up to 12)</label><div class="inrow"><input type="text" id="custom" placeholder="e.g. 29, 10, 14, 37, 13" /><button class="btn gold" id="apply">Sort it</button></div></div>
+        <div class="field" style="max-width:160px;flex:0 0 160px;justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="rand">Shuffle new</button></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div><div class="minihead"><span class="num">CODE</span> Pseudocode, line by line</div><div class="code" id="code"></div></div>
+      <div>
+        <div class="minihead"><span class="num">DATA</span> What it costs, live</div>
+        <div class="stats"><div class="stat"><div class="k">Comparisons</div><div class="v" id="st-cmp">0</div></div><div class="stat"><div class="k">Writes</div><div class="v" id="st-write">0</div></div><div class="stat"><div class="k">Depth / passes</div><div class="v" id="st-pass">0</div></div><div class="stat"><div class="k">Elements</div><div class="v" id="st-n">0</div></div></div>
+        <div class="minihead" style="margin-top:22px;"><span class="num">NOTES</span> Algorithm traits</div><div class="stats" id="stack"></div>
+      </div>
+    </div>
+  </section>
+  <section id="how" class="section"><div class="sectionhead"><div class="eyebrow">The big idea</div><h2>Sort small runs, then merge them</h2><p>Merge Sort is stable and predictable. It pays extra memory to guarantee O(n log n) time, even when the input is already awkward.</p></div>
+    <div class="cards3"><div class="panel icard"><div class="step-n">i.</div><h3>Split</h3><p>Keep dividing the range in half until every piece has one element.</p></div><div class="panel icard"><div class="step-n">ii.</div><h3>Compare fronts</h3><p>During merge, only the first unmerged item from each half needs to be compared.</p></div><div class="panel icard"><div class="step-n">iii.</div><h3>Write back</h3><p>The smaller front value is copied into the output position, preserving equal-value order.</p></div></div>
+  </section>
+<section class="panel prose"><h3>When to use Merge Sort</h3><p>Use Merge Sort when predictable <code>O(n log n)</code> time and stability matter more than extra memory.</p><ul><li>Sorting linked lists, where merging is cheap.</li><li>External sorting for files too large to fit fully in memory.</li><li>Stable ordering in reports, logs, and multi-key data pipelines.</li></ul></section>
+<section id="cost" class="section"><div class="panel prose" style="padding:8px;"><table class="ctable"><thead><tr><th>Case</th><th>Time</th><th>Space</th><th>Stable</th></tr></thead><tbody><tr><td class="case good">Best</td><td class="big">O(n log n)</td><td>O(n)</td><td class="good">Yes</td></tr><tr><td class="case">Average</td><td class="big">O(n log n)</td><td>O(n)</td><td class="good">Yes</td></tr><tr><td class="case">Worst</td><td class="big">O(n log n)</td><td>O(n)</td><td class="good">Yes</td></tr></tbody></table></div></section>
+</main>
+<footer>Merge Sort Studio - made with a ♥ for clear algorithms. </footer>
+<script>
+window.SORT_VISUALIZER = {
+  algorithm:"merge",
+  view:"array",
+  initial:[29,10,14,37,13,21,6,25],
+  code:[
+    '<span class="fn">mergeSort</span>(A, lo, hi)',
+    '  <span class="kw">if</span> lo >= hi: return',
+    '  mid = (lo + hi) / 2',
+    '  <span class="fn">mergeSort</span>(A, lo, mid)',
+    '  <span class="fn">mergeSort</span>(A, mid+1, hi)',
+    '  <span class="fn">merge</span>(A, lo, mid, hi)',
+    '  i = lo, j = mid + 1',
+    '  <span class="kw">while</span> both halves have items',
+    '    write smaller front value',
+    '  copy remaining left values',
+    '  copy remaining right values',
+    '  range is sorted'
+  ],
+  traceLabels:[{k:"Stable",v:"Yes"},{k:"Extra memory",v:"O(n)"},{k:"Strategy",v:"Divide and conquer"},{k:"Best use",v:"Guaranteed order"}]
+};
+</script>
+<script src="sorting-visualizer.js"></script>
+</body>
+</html>

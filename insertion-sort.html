@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insertion Sort - An Interactive Visualizer</title>
+<meta name="description" content="A step-by-step Insertion Sort visualizer using the same theme as the Quick Sort lesson." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="sorting-theme.css" />
+</head>
+<body>
+<div class="topbar"><div class="brand"><span class="glyph">I</span> Insertion Sort Studio</div><nav class="topnav"><a href="quicksort.html">Quick</a><a href="merge-sort.html">Merge</a><a href="heap-sort.html">Heap</a><a href="bubble-sort.html">Bubble</a><a href="selection-sort.html">Selection</a><a href="bucket-sort.html">Bucket</a><a href="radix-sort.html">Radix</a><a href="counting-sort.html">Counting</a></nav></div>
+<header class="hero wrap"><div class="eyebrow">Pick - Shift - Insert</div><h1>Watch <span class="gold">Insertion Sort</span><br>grow a sorted <em>prefix</em>.</h1><p>Take one key at a time, shift larger values to the right, and drop the key into the open slot.</p></header>
+<main class="wrap">
+<section class="panel studio">
+  <div class="stage-head"><div><h2>The array, in motion</h2><div class="sub">Gold marks the key. Pink compares it against the sorted prefix, and sage shows the sorted left side.</div></div><div class="legend"><span><i class="chip range"></i>Sorted prefix</span><span><i class="chip compare"></i>Comparing</span><span><i class="chip pivot"></i>Key</span><span><i class="chip swap"></i>Shifting</span><span><i class="chip sorted"></i>Placed</span><span><i class="chip dim"></i>Unseen</span></div></div>
+  <div class="stage"><div class="bars" id="bars"></div></div>
+  <div class="narration"><div class="dot">*</div><div class="text" id="narration">Press <b>Play</b> to begin sorting.</div></div>
+  <div class="controls"><div class="scrub"><input type="range" id="scrub" min="0" max="0" value="0" aria-label="Step scrubber" /><div class="steplabel" id="steplabel">step 0 / 0</div></div><div class="btnrow"><button class="btn" id="back">Back</button><button class="btn primary" id="playBtn" aria-pressed="false">Play</button><button class="btn" id="fwd">Step</button><button class="btn" id="reset">Restart</button><div class="spacer"></div><div class="speedbox"><span>Slow</span><input type="range" id="speed" min="120" max="1400" value="760" step="20" aria-label="Speed" /><span>Fast</span></div></div><div class="config"><div class="field"><label for="custom">Your own numbers (comma separated, up to 12)</label><div class="inrow"><input type="text" id="custom" placeholder="e.g. 29, 10, 14, 37, 13" /><button class="btn gold" id="apply">Sort it</button></div></div><div class="field" style="max-width:160px;flex:0 0 160px;justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="rand">Shuffle new</button></div></div></div>
+  <div class="grid2"><div><div class="minihead"><span class="num">CODE</span> Pseudocode, line by line</div><div class="code" id="code"></div></div><div><div class="minihead"><span class="num">DATA</span> What it costs, live</div><div class="stats"><div class="stat"><div class="k">Comparisons</div><div class="v" id="st-cmp">0</div></div><div class="stat"><div class="k">Writes</div><div class="v" id="st-write">0</div></div><div class="stat"><div class="k">Inserted keys</div><div class="v" id="st-pass">0</div></div><div class="stat"><div class="k">Elements</div><div class="v" id="st-n">0</div></div></div><div class="minihead" style="margin-top:22px;"><span class="num">NOTES</span> Algorithm traits</div><div class="stats" id="stack"></div></div></div>
+</section>
+<section class="section"><div class="sectionhead"><div class="eyebrow">The big idea</div><h2>Keep the left side sorted</h2><p>Insertion Sort is excellent on tiny or nearly sorted arrays because it stops shifting as soon as the key is in the right spot.</p></div><div class="cards3"><div class="panel icard"><div class="step-n">i.</div><h3>Choose a key</h3><p>The next unsorted value is removed conceptually from the list.</p></div><div class="panel icard"><div class="step-n">ii.</div><h3>Shift larger values</h3><p>Walk left through the sorted prefix and make space by moving larger values right.</p></div><div class="panel icard"><div class="step-n">iii.</div><h3>Insert</h3><p>Place the key in the open slot. The sorted prefix grows by one.</p></div></div></section>
+<section class="panel prose"><h3>When to use Insertion Sort</h3><p>Use Insertion Sort for tiny arrays or data that is already close to sorted.</p><ul><li>Small subarrays inside hybrid sorts such as TimSort or introsort variants.</li><li>Online insertion, where values arrive one at a time.</li><li>Simple stable sorting when implementation clarity matters.</li></ul></section>
+<section class="section"><div class="panel prose" style="padding:8px;"><table class="ctable"><thead><tr><th>Case</th><th>Time</th><th>Space</th><th>Stable</th></tr></thead><tbody><tr><td class="case good">Best</td><td class="big">O(n)</td><td>O(1)</td><td class="good">Yes</td></tr><tr><td class="case">Average</td><td class="big">O(n²)</td><td>O(1)</td><td class="good">Yes</td></tr><tr><td class="case bad">Worst</td><td class="big">O(n²)</td><td>O(1)</td><td class="good">Yes</td></tr></tbody></table></div></section>
+</main>
+<footer>Insertion Sort Studio - made with a ♥ for clear algorithms. </footer>
+<script>
+window.SORT_VISUALIZER = {algorithm:"insertion",initial:[29,10,14,37,13,21,6,25],code:[
+'<span class="fn">insertionSort</span>(A)',
+'  <span class="kw">for</span> i = 1 to n-1',
+'    key = A[i]',
+'    <span class="kw">while</span> j >= 0 and A[j] > key',
+'      A[j+1] = A[j]',
+'    A[j+1] = key'
+],traceLabels:[{k:"Stable",v:"Yes"},{k:"Extra memory",v:"O(1)"},{k:"Strategy",v:"Incremental insert"},{k:"Best use",v:"Small/nearly sorted"}]};
+</script>
+<script src="sorting-visualizer.js"></script>
+</body>
+</html>

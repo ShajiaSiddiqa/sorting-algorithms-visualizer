@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Counting Sort - An Interactive Visualizer</title>
+<meta name="description" content="A Counting Sort visualizer with count buckets, output array, pseudocode, complexity, and use cases." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="sorting-theme.css" />
+</head>
+<body>
+<div class="topbar"><div class="brand"><span class="glyph">C</span> Counting Sort Studio</div><nav class="topnav"><a href="quicksort.html">Quick</a><a href="merge-sort.html">Merge</a><a href="heap-sort.html">Heap</a><a href="insertion-sort.html">Insertion</a><a href="bubble-sort.html">Bubble</a><a href="selection-sort.html">Selection</a><a href="bucket-sort.html">Bucket</a><a href="radix-sort.html">Radix</a></nav></div>
+<header class="hero wrap"><div class="eyebrow">Count - Emit - Finish</div><h1>Watch <span class="gold">Counting Sort</span><br>sort by <em>frequency</em>.</h1><p>Instead of comparing items, Counting Sort counts how many times each value appears, then writes values back in numeric order.</p></header>
+<main class="wrap">
+<section class="panel studio"><div class="stage-head"><div><h2>Counts and output</h2><div class="sub">The top row is the current array/output. Buckets below show frequency counts by value.</div></div><div class="legend"><span><i class="chip pivot"></i>Reading / emitting</span><span><i class="chip sorted"></i>Output</span><span><i class="chip dim"></i>Empty count</span></div></div>
+<div class="stage"><div class="bars" id="bars"></div></div><div class="narration"><div class="dot">*</div><div class="text" id="narration">Press <b>Play</b> to begin sorting.</div></div>
+<div class="controls"><div class="scrub"><input type="range" id="scrub" min="0" max="0" value="0" /><div class="steplabel" id="steplabel">step 0 / 0</div></div><div class="btnrow"><button class="btn" id="back">Back</button><button class="btn primary" id="playBtn" aria-pressed="false">Play</button><button class="btn" id="fwd">Step</button><button class="btn" id="reset">Restart</button><div class="spacer"></div><div class="speedbox"><span>Slow</span><input type="range" id="speed" min="120" max="1400" value="760" step="20" /><span>Fast</span></div></div><div class="config"><div class="field"><label for="custom">Small non-negative integers (up to 12)</label><div class="inrow"><input type="text" id="custom" placeholder="e.g. 4, 2, 2, 8, 3, 3, 1" /><button class="btn gold" id="apply">Sort it</button></div></div><div class="field" style="max-width:160px;flex:0 0 160px;justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="rand">Shuffle new</button></div></div></div>
+<div class="grid2"><div><div class="minihead"><span class="num">CODE</span> Pseudocode</div><div class="code" id="code"></div></div><div><div class="minihead"><span class="num">DATA</span> Live cost</div><div class="stats"><div class="stat"><div class="k">Comparisons</div><div class="v" id="st-cmp">0</div></div><div class="stat"><div class="k">Writes</div><div class="v" id="st-write">0</div></div><div class="stat"><div class="k">Reads</div><div class="v" id="st-pass">0</div></div><div class="stat"><div class="k">Elements</div><div class="v" id="st-n">0</div></div></div><div class="minihead" style="margin-top:22px;"><span class="num">NOTES</span> Algorithm traits</div><div class="stats" id="stack"></div></div></div></section>
+<section class="panel prose"><h3>When to use Counting Sort</h3><p>Use Counting Sort when keys are integers in a small known range. It is not comparison-based, so it can beat <code>O(n log n)</code>.</p><ul><li>Exam scores, ages, ratings, categories, or byte values.</li><li>As a stable subroutine inside Radix Sort.</li><li>Histograms and frequency tables where counts are already useful.</li></ul></section>
+<section class="section"><div class="panel prose" style="padding:8px;"><table class="ctable"><thead><tr><th>Case</th><th>Time</th><th>Space</th><th>Stable</th></tr></thead><tbody><tr><td class="case good">Best/Average/Worst</td><td class="big">O(n + k)</td><td>O(k)</td><td class="good">Can be stable</td></tr></tbody></table></div></section>
+</main><footer>Counting Sort Studio - made with a ♥ for clear algorithms.  </footer>
+<script>
+window.SORT_VISUALIZER={algorithm:"counting",view:"buckets",initial:[4,2,2,8,3,3,1],maxRandom:10,inputMax:20,code:['<span class="fn">countingSort</span>(A)','  create count[0..k]','  <span class="kw">for</span> value in A','    count[value]++','  <span class="kw">for</span> value = 0 to k','    <span class="kw">while</span> count[value] > 0','      append value to output'],traceLabels:[{k:"Stable",v:"With prefix positions"},{k:"Extra memory",v:"O(k)"},{k:"Strategy",v:"Frequency counts"},{k:"Best use",v:"Small integer range"}]};
+</script><script src="sorting-visualizer.js"></script>
+</body>
+</html>

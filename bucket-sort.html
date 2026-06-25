@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bucket Sort - An Interactive Visualizer</title>
+<meta name="description" content="A Bucket Sort visualizer with value-range buckets, local sorting, concatenation, complexity, and use cases." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="sorting-theme.css" />
+</head>
+<body>
+<div class="topbar"><div class="brand"><span class="glyph">U</span> Bucket Sort Studio</div><nav class="topnav"><a href="quicksort.html">Quick</a><a href="merge-sort.html">Merge</a><a href="heap-sort.html">Heap</a><a href="insertion-sort.html">Insertion</a><a href="bubble-sort.html">Bubble</a><a href="selection-sort.html">Selection</a><a href="radix-sort.html">Radix</a><a href="counting-sort.html">Counting</a></nav></div>
+<header class="hero wrap"><div class="eyebrow">Distribute - Sort - Concatenate</div><h1>Watch <span class="gold">Bucket Sort</span><br>group values by <em>range</em>.</h1><p>Drop values into range buckets, sort each bucket locally, then concatenate buckets from low range to high range.</p></header>
+<main class="wrap">
+<section class="panel studio"><div class="stage-head"><div><h2>Range buckets</h2><div class="sub">Buckets show value ranges. The algorithm is clearest when data is fairly uniform across those ranges.</div></div><div class="legend"><span><i class="chip pivot"></i>Current value</span><span><i class="chip range"></i>Active bucket</span><span><i class="chip sorted"></i>Final output</span></div></div>
+<div class="stage"><div class="bars" id="bars"></div></div><div class="narration"><div class="dot">*</div><div class="text" id="narration">Press <b>Play</b> to begin sorting.</div></div>
+<div class="controls"><div class="scrub"><input type="range" id="scrub" min="0" max="0" value="0" /><div class="steplabel" id="steplabel">step 0 / 0</div></div><div class="btnrow"><button class="btn" id="back">Back</button><button class="btn primary" id="playBtn" aria-pressed="false">Play</button><button class="btn" id="fwd">Step</button><button class="btn" id="reset">Restart</button><div class="spacer"></div><div class="speedbox"><span>Slow</span><input type="range" id="speed" min="120" max="1400" value="760" step="20" /><span>Fast</span></div></div><div class="config"><div class="field"><label for="custom">Numbers from 0-120 (up to 12)</label><div class="inrow"><input type="text" id="custom" placeholder="e.g. 29, 10, 14, 37, 13, 91" /><button class="btn gold" id="apply">Sort it</button></div></div><div class="field" style="max-width:160px;flex:0 0 160px;justify-content:flex-end;"><label>&nbsp;</label><button class="btn" id="rand">Shuffle new</button></div></div></div>
+<div class="grid2"><div><div class="minihead"><span class="num">CODE</span> Pseudocode</div><div class="code" id="code"></div></div><div><div class="minihead"><span class="num">DATA</span> Live cost</div><div class="stats"><div class="stat"><div class="k">Local compares</div><div class="v" id="st-cmp">0</div></div><div class="stat"><div class="k">Writes</div><div class="v" id="st-write">0</div></div><div class="stat"><div class="k">Buckets sorted</div><div class="v" id="st-pass">0</div></div><div class="stat"><div class="k">Elements</div><div class="v" id="st-n">0</div></div></div><div class="minihead" style="margin-top:22px;"><span class="num">NOTES</span> Algorithm traits</div><div class="stats" id="stack"></div></div></div></section>
+<section class="panel prose"><h3>When to use Bucket Sort</h3><p>Use Bucket Sort when values are distributed fairly evenly over a known range. It turns one large sort into several smaller local sorts.</p><ul><li>Uniform numeric data such as normalized scores or measurements.</li><li>Preprocessing values into ranges before local sorting.</li><li>Teaching distribution-based sorting and load balance.</li></ul></section>
+<section class="section"><div class="panel prose" style="padding:8px;"><table class="ctable"><thead><tr><th>Case</th><th>Time</th><th>Space</th><th>Stable</th></tr></thead><tbody><tr><td class="case good">Average</td><td class="big">O(n + k)</td><td>O(n + k)</td><td>Depends on bucket sort</td></tr><tr><td class="case bad">Worst</td><td class="big">O(n²)</td><td>O(n + k)</td><td>Depends</td></tr></tbody></table></div></section>
+</main><footer>Bucket Sort Studio - made with a ♥ for clear algorithms. </footer>
+<script>
+window.SORT_VISUALIZER={algorithm:"bucket",view:"buckets",initial:[29,10,14,37,13,91,62,25],maxRandom:121,code:['<span class="fn">bucketSort</span>(A)','  create k empty buckets','  <span class="kw">for</span> value in A','    place value into its range bucket','  <span class="kw">for</span> each bucket','    sort bucket locally','  concatenate buckets in order'],traceLabels:[{k:"Stable",v:"Depends locally"},{k:"Extra memory",v:"O(n + k)"},{k:"Strategy",v:"Range distribution"},{k:"Best use",v:"Uniform numeric data"}]};
+</script><script src="sorting-visualizer.js"></script>
+</body>
+</html>
