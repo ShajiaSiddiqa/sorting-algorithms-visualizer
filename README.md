@@ -49,7 +49,12 @@ Quick Sort also includes:
 - Responsive layout and reduced-motion support
 
 
+---
+## Visualizer
 
+http://shajiasiddiqa.github.io/sorting-algorithms-visualizer/index.html
+
+---
 
 ## Run Locally
 
