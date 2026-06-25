@@ -63,9 +63,13 @@ a{color:var(--gold-deep);}
   box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55), var(--shadow-soft);
   display:grid;place-items:center;color:#fff;font-size:.95rem;
 }
-.topnav{display:flex;flex-wrap:wrap;gap:18px 24px;font-size:.93rem;}
+.topnav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:18px 24px;margin-left:auto;font-size:.93rem;}
 .topnav a{color:var(--ink-soft);text-decoration:none;transition:color .2s;}
 .topnav a:hover{color:var(--pink-deep);}
+.home-link{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none;margin-left:16px;color:#fff;background:linear-gradient(150deg,var(--gold-soft),var(--pink));box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55), var(--shadow-soft);text-decoration:none;transition:transform .15s,box-shadow .2s;}
+.home-link:hover{transform:translateY(-1px);box-shadow:var(--shadow);}
+.home-link:focus-visible{outline:3px solid rgba(195,154,92,.45);outline-offset:2px;}
+.home-link svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 
 .hero{padding:34px 0 14px;text-align:center;}
 .eyebrow{
@@ -331,6 +335,7 @@ footer .heart{color:var(--pink);}
     <a href="radix-sort.html">Radix</a>
     <a href="counting-sort.html">Counting</a>
   </nav>
+  <a class="home-link" href="index.html" aria-label="Return to main page" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 10v10h5v-6h3v6h5V10"></path></svg></a>
 </div>
 
 <header class="hero wrap">
