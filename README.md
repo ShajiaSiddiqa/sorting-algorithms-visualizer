@@ -5,15 +5,15 @@ An interactive, step-by-step sorting visualizer collection. The `index.html` pag
 ## Visualizer Pages (with brief notes)
 
 - `index.html` — Main hub linking to every visualizer and the comparison table.
-- `quicksort.html` — Quick Sort visualization with multiple pivot strategies, recursion tree, and in-place partitioning. (Avg: O(n log n), Worst: O(n²), Space: O(log n))
-- `merge-sort.html` — Merge Sort with divide-and-conquer rows and merge animations. (Avg/Worst: O(n log n), Space: O(n))
-- `heap-sort.html` — Heap Sort using a binary-heap view and sift-down animations. (Avg/Worst: O(n log n), Space: O(1))
-- `insertion-sort.html` — Insertion Sort for nearly-sorted arrays and small inputs; step-by-step element shifts. (Avg/Worst: O(n²), Space: O(1))
-- `bubble-sort.html` — Bubble Sort with pass and swap highlights (educational demonstration). (Avg/Worst: O(n²), Space: O(1))
-- `selection-sort.html` — Selection Sort showing min selection and swap per pass. (Avg/Worst: O(n²), Space: O(1))
-- `bucket-sort.html` — Bucket Sort with bucket distribution and collection views (best for uniform data). (Avg: O(n + k), Worst: O(n²), Space: O(n + k))
-- `radix-sort.html` — Radix Sort animation across digit passes and buckets; for integers with limited digit width. (Avg/Worst: O(d(n + b)), Space: O(n + b))
-- `counting-sort.html` — Counting Sort with count array and stable output reconstruction (suitable for small integer ranges). (Avg/Worst: O(n + k), Space: O(k))
+- `quicksort.html` — Quick Sort visualization with multiple pivot strategies, recursion tree, and in-place partitioning. 
+- `merge-sort.html` — Merge Sort with divide-and-conquer rows and merge animations. 
+- `heap-sort.html` — Heap Sort using a binary-heap view and sift-down animations. 
+- `insertion-sort.html` — Insertion Sort for nearly-sorted arrays and small inputs; step-by-step element shifts. 
+- `bubble-sort.html` — Bubble Sort with pass and swap highlights (educational demonstration). 
+- `selection-sort.html` — Selection Sort showing min selection and swap per pass. 
+- `bucket-sort.html` — Bucket Sort with bucket distribution and collection views (best for uniform data). 
+- `radix-sort.html` — Radix Sort animation across digit passes and buckets; for integers with limited digit width. 
+- `counting-sort.html` — Counting Sort with count array and stable output reconstruction (suitable for small integer ranges).
 
 Shared assets for the visualizers:
 
