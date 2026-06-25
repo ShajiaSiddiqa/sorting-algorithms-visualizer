@@ -167,3 +167,7 @@ No frameworks or external JavaScript dependencies are used.
 ## Browser Support
 
 Use a current version of Chrome, Firefox, Edge, or Safari. The application relies on modern browser features including `IntersectionObserver`, CSS custom properties, and SVG.
+
+---
+## ARTICLE Published on ` "MEDIUM"`
+https://medium.com/@shajiasiddiqa/the-hidden-science-behind-sorting-a-journey-through-the-9-algorithms-that-organize-our-digital-ae21d469c1d0
